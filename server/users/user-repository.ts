@@ -1,9 +1,9 @@
 import "server-only";
 
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 
 export async function findUserByEmail(email: string) {
-  return db.user.findUnique({
+  return getDb().user.findUnique({
     where: { email },
     include: { role: true },
   });
