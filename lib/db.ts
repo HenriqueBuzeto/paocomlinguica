@@ -11,8 +11,17 @@ declare global {
 }
 
 export function getDb() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set");
+  const url =
+    process.env.DATABASE_URL ??
+    process.env.POSTGRES_PRISMA_URL ??
+    process.env.POSTGRES_URL ??
+    process.env.DATABASE_URL_UNPOOLED;
+
+  if (typeof url !== "string" || url.length === 0) {
+    throw new Error(
+      `Database connection string is missing or invalid. typeof DATABASE_URL is ${typeof process.env
+        .DATABASE_URL}.`,
+    );
   }
 
   neonConfig.webSocketConstructor = ws;
@@ -20,7 +29,7 @@ export function getDb() {
   const pool =
     global.neonPool ??
     new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: url,
     });
 
   if (process.env.NODE_ENV !== "production") global.neonPool = pool;

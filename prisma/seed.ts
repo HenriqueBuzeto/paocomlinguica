@@ -8,12 +8,18 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 
 config({ path: ".env" });
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not set");
+const url =
+  process.env.DATABASE_URL ??
+  process.env.POSTGRES_PRISMA_URL ??
+  process.env.POSTGRES_URL ??
+  process.env.DATABASE_URL_UNPOOLED;
+
+if (typeof url !== "string" || url.length === 0) {
+  throw new Error("Database connection string is missing or invalid");
 }
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: url,
 });
 
 const adapter = new PrismaNeon(
