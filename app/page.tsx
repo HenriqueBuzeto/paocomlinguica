@@ -1,31 +1,117 @@
+import { AppShell } from "@/components/shell/app-shell";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp, Wallet, Coins } from "lucide-react";
+
 export default function Home() {
   return (
-    <div className="flex flex-1 bg-white">
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-6 py-10">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-            <p className="text-sm text-zinc-600">
-              Viso geral operacional (em construo)
-            </p>
-          </div>
+    <AppShell title="Dashboard">
+      <div className="flex flex-col gap-6">
+        <div>
+          <p className="text-sm text-muted-foreground">
+            Visão geral operacional (em construção)
+          </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border bg-white p-5 shadow-sm">
-            <div className="text-sm text-zinc-600">Caixa</div>
-            <div className="mt-2 text-xl font-semibold">--</div>
-          </div>
-          <div className="rounded-xl border bg-white p-5 shadow-sm">
-            <div className="text-sm text-zinc-600">Total vendido hoje</div>
-            <div className="mt-2 text-xl font-semibold">--</div>
-          </div>
-          <div className="rounded-xl border bg-white p-5 shadow-sm">
-            <div className="text-sm text-zinc-600">Saldo atual</div>
-            <div className="mt-2 text-xl font-semibold">--</div>
-          </div>
+          <Card>
+            <CardHeader className="gap-2">
+              <div className="flex items-center justify-between">
+                <CardDescription>Caixa</CardDescription>
+                <span className="grid size-9 place-items-center rounded-xl border bg-muted/40">
+                  <Wallet className="size-4 text-muted-foreground" />
+                </span>
+              </div>
+              <CardTitle className="text-3xl font-semibold tracking-tight">
+                --
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xs text-muted-foreground">
+                Status e movimentações do caixa
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="gap-2">
+              <div className="flex items-center justify-between">
+                <CardDescription>Total vendido hoje</CardDescription>
+                <span className="grid size-9 place-items-center rounded-xl border bg-muted/40">
+                  <TrendingUp className="size-4 text-muted-foreground" />
+                </span>
+              </div>
+              <CardTitle className="text-3xl font-semibold tracking-tight">
+                --
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xs text-muted-foreground">
+                Comparativo e performance diária
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="gap-2">
+              <div className="flex items-center justify-between">
+                <CardDescription>Saldo atual</CardDescription>
+                <span className="grid size-9 place-items-center rounded-xl border bg-muted/40">
+                  <Coins className="size-4 text-muted-foreground" />
+                </span>
+              </div>
+              <CardTitle className="text-3xl font-semibold tracking-tight">
+                --
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xs text-muted-foreground">
+                Consolidado de entradas e saídas
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </main>
-    </div>
+
+        <div className="grid gap-4 lg:grid-cols-3">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-base">Atividade</CardTitle>
+              <CardDescription>
+                Painel de gráficos e insights (em breve)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[260px] rounded-2xl border bg-gradient-to-b from-muted/30 to-background" />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Resumo</CardTitle>
+              <CardDescription>Últimas movimentações (em breve)</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between rounded-2xl border bg-background/60 px-4 py-3 shadow-sm"
+                  >
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium">
+                        Movimento
+                      </div>
+                      <div className="truncate text-xs text-muted-foreground">
+                        Detalhe
+                      </div>
+                    </div>
+                    <div className="text-sm font-semibold">--</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </AppShell>
   );
 }
