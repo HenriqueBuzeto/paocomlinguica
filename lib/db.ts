@@ -1,8 +1,9 @@
 import "server-only";
 
 import { PrismaClient } from "@prisma/client";
-import { Pool } from "@neondatabase/serverless";
+import { neonConfig, Pool } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
+import ws from "ws";
 
 declare global {
   var prisma: PrismaClient | undefined;
@@ -13,6 +14,8 @@ export function getDb() {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not set");
   }
+
+  neonConfig.webSocketConstructor = ws;
 
   const pool =
     global.neonPool ??
