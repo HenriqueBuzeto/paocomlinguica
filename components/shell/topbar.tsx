@@ -18,8 +18,8 @@ function Topbar({ title }: { title: string }) {
         </h1>
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
-        <div className="relative hidden w-[360px] max-w-[38vw] md:block">
+      <div className="mx-auto hidden w-full max-w-[560px] md:block">
+        <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Buscar…"
@@ -27,8 +27,9 @@ function Topbar({ title }: { title: string }) {
             aria-label="Buscar"
           />
         </div>
+      </div>
 
-        <div className="flex items-center gap-2 rounded-2xl border bg-card p-1 pl-1.5 shadow-sm">
+      <div className="ml-auto flex items-center gap-2 rounded-2xl border bg-card p-1 pl-1.5 shadow-sm">
           <Avatar
             name={data?.user?.name ?? data?.user?.email ?? undefined}
             src={null}
@@ -50,7 +51,6 @@ function Topbar({ title }: { title: string }) {
           >
             <LogOut className="size-4" />
           </Button>
-        </div>
       </div>
     </header>
   );

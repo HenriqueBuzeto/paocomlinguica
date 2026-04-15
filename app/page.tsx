@@ -1,27 +1,36 @@
 import { AppShell } from "@/components/shell/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Wallet, Coins } from "lucide-react";
+import { BrasiliaClock } from "@/components/dashboard/brasilia-clock";
 
 export default function Home() {
   return (
     <AppShell title="Dashboard">
       <div className="flex flex-col gap-6">
-        <div>
-          <p className="text-sm text-muted-foreground">
-            Visão geral operacional (em construção)
-          </p>
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="text-sm text-muted-foreground">
+              Visão geral operacional (em construção)
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <div className="rounded-2xl border bg-card px-4 py-2 shadow-sm">
+              <BrasiliaClock />
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
-            <CardHeader className="gap-2">
+            <CardHeader className="gap-3">
               <div className="flex items-center justify-between">
                 <CardDescription>Caixa</CardDescription>
-                <span className="grid size-9 place-items-center rounded-xl border bg-muted/40">
+                <span className="grid size-10 place-items-center rounded-2xl border bg-muted/40">
                   <Wallet className="size-4 text-muted-foreground" />
                 </span>
               </div>
-              <CardTitle className="text-3xl font-semibold tracking-tight">
+              <CardTitle className="text-4xl font-semibold tracking-tight">
                 --
               </CardTitle>
             </CardHeader>
@@ -33,14 +42,14 @@ export default function Home() {
           </Card>
 
           <Card>
-            <CardHeader className="gap-2">
+            <CardHeader className="gap-3">
               <div className="flex items-center justify-between">
                 <CardDescription>Total vendido hoje</CardDescription>
-                <span className="grid size-9 place-items-center rounded-xl border bg-muted/40">
+                <span className="grid size-10 place-items-center rounded-2xl border bg-muted/40">
                   <TrendingUp className="size-4 text-muted-foreground" />
                 </span>
               </div>
-              <CardTitle className="text-3xl font-semibold tracking-tight">
+              <CardTitle className="text-4xl font-semibold tracking-tight">
                 --
               </CardTitle>
             </CardHeader>
@@ -52,14 +61,14 @@ export default function Home() {
           </Card>
 
           <Card>
-            <CardHeader className="gap-2">
+            <CardHeader className="gap-3">
               <div className="flex items-center justify-between">
                 <CardDescription>Saldo atual</CardDescription>
-                <span className="grid size-9 place-items-center rounded-xl border bg-muted/40">
+                <span className="grid size-10 place-items-center rounded-2xl border bg-muted/40">
                   <Coins className="size-4 text-muted-foreground" />
                 </span>
               </div>
-              <CardTitle className="text-3xl font-semibold tracking-tight">
+              <CardTitle className="text-4xl font-semibold tracking-tight">
                 --
               </CardTitle>
             </CardHeader>
@@ -80,7 +89,7 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[260px] rounded-2xl border bg-gradient-to-b from-muted/30 to-background" />
+              <div className="h-[320px] rounded-2xl border bg-gradient-to-b from-muted/30 to-background" />
             </CardContent>
           </Card>
 
