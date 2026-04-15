@@ -15,11 +15,11 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { label: "Dashboard", href: "/", icon: Home },
-  { label: "Caixa", href: undefined, icon: Wallet },
-  { label: "Vendas", href: undefined, icon: Receipt },
-  { label: "Produtos", href: undefined, icon: Package },
-  { label: "Relatórios", href: undefined, icon: BarChart3 },
-  { label: "Configurações", href: undefined, icon: Settings },
+  { label: "Caixa", href: "/caixa", icon: Wallet },
+  { label: "Vendas", href: "/vendas", icon: Receipt },
+  { label: "Produtos", href: "/produtos", icon: Package },
+  { label: "Relatórios", href: "/relatorios", icon: BarChart3 },
+  { label: "Configurações", href: "/configuracoes", icon: Settings },
 ] as const;
 
 function Sidebar() {
@@ -42,8 +42,7 @@ function Sidebar() {
       <nav className="flex flex-1 flex-col gap-1.5 px-3 py-4">
         {nav.map((item) => {
           const Icon = item.icon;
-          const active = item.href ? pathname === item.href : false;
-          const disabled = !item.href;
+          const active = pathname === item.href;
 
           const base =
             "group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm transition-colors";
@@ -53,7 +52,6 @@ function Sidebar() {
             active
               ? "bg-white/8 text-white"
               : "text-white/70 hover:bg-white/7 hover:text-white",
-            disabled && "cursor-not-allowed opacity-60 hover:bg-transparent",
           );
 
           const content = (
@@ -71,21 +69,8 @@ function Sidebar() {
                 <Icon className={cn("size-4", active ? "text-primary" : "text-white/80")} />
               </span>
               <span className="truncate">{item.label}</span>
-              {disabled ? (
-                <span className="ml-auto rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-white/60">
-                  em breve
-                </span>
-              ) : null}
             </>
           );
-
-          if (!item.href) {
-            return (
-              <div key={item.label} className={cls} aria-disabled="true">
-                {content}
-              </div>
-            );
-          }
 
           return (
             <Link key={item.label} href={item.href} className={cls}>
