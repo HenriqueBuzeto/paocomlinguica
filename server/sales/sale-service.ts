@@ -37,6 +37,7 @@ export async function createSale(input: {
   deliveryFee?: string;
   items: SaleItemInput[];
   payments: SalePaymentInput[];
+  cashReceived?: string;
 }) {
   const session = await getServerSession(authOptions);
   const operatorId = requireUserId(session?.user?.id);
@@ -134,10 +135,25 @@ export async function createSale(input: {
     .filter((p) => kindById.get(p.paymentMethodId) === "CASH")
     .reduce((acc, p) => acc.add(p.amount), new Prisma.Decimal(0));
 
+  const cashReceived = input.cashReceived ? toDecimal(input.cashReceived) : null;
+  if (cashAmount.gt(0)) {
+    if (!cashReceived || !cashReceived.isFinite() || cashReceived.lt(total)) {
+      throw new Error("Valor recebido em dinheiro inválido.");
+    }
+  }
+
+  const changeDue = cashAmount.gt(0) && cashReceived ? cashReceived.sub(total) : null;
+
   return db.$transaction(async (tx: unknown) => {
     const prisma = tx as typeof db;
 
-    const sale = await prisma.sale.create({
+    const saleModel = prisma.sale as unknown as {
+      create: (args: unknown) => Promise<{ id: string }>;
+      update: (args: unknown) => Promise<unknown>;
+      findUnique: (args: unknown) => Promise<unknown>;
+    };
+
+    const sale = await saleModel.create({
       data: {
         status: "COMPLETED",
         cashRegisterId: cashRegister.id,
@@ -146,6 +162,8 @@ export async function createSale(input: {
         notes: input.notes?.trim() || null,
         discount,
         deliveryFee,
+        cashReceived,
+        changeDue,
         total,
       },
     });
@@ -182,5 +200,74 @@ export async function createSale(input: {
     }
 
     return sale;
+  });
+}
+
+export async function cancelSale(input: { id: string; reason?: string }) {
+  const session = await getServerSession(authOptions);
+  const userId = requireUserId(session?.user?.id);
+
+  const db = getDb();
+
+  const openCash = await db.cashRegister.findFirst({
+    where: { status: "OPEN" },
+    select: { id: true },
+  });
+
+  if (!openCash) {
+    throw new Error("Não é possível cancelar venda com o caixa fechado.");
+  }
+
+  return db.$transaction(async (tx: unknown) => {
+    const prisma = tx as typeof db;
+
+    const saleModel = prisma.sale as unknown as {
+      update: (args: unknown) => Promise<unknown>;
+    };
+
+    const sale = await prisma.sale.findUnique({
+      where: { id: input.id },
+      include: {
+        payments: {
+          include: { paymentMethod: { select: { kind: true } } },
+        },
+      },
+    });
+
+    if (!sale) throw new Error("Venda não encontrada.");
+    if (sale.status === "CANCELED") throw new Error("Venda já está cancelada.");
+    if (sale.cashRegisterId !== openCash.id) {
+      throw new Error("Não é possível cancelar venda de um caixa anterior.");
+    }
+
+    const total = new Prisma.Decimal(sale.total);
+    const cashPaid = sale.payments
+      .filter((p) => p.paymentMethod.kind === "CASH")
+      .reduce((acc, p) => acc.add(new Prisma.Decimal(p.amount)), new Prisma.Decimal(0));
+
+    await saleModel.update({
+      where: { id: sale.id },
+      data: {
+        status: "CANCELED",
+        canceledAt: new Date(),
+        canceledById: userId,
+        canceledReason: input.reason?.trim() || null,
+      },
+    });
+
+    if (cashPaid.gt(0)) {
+      await prisma.cashMovement.create({
+        data: {
+          cashRegisterId: openCash.id,
+          type: "CANCELAMENTO",
+          amount: cashPaid,
+          description: "Cancelamento de venda",
+          saleId: sale.id,
+          userId,
+        },
+      });
+    }
+
+    return { id: sale.id, total: total.toString() };
   });
 }

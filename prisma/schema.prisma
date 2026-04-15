@@ -60,7 +60,8 @@ model User {
   cashRegistersOpened CashRegister[] @relation("cash_register_opened_by")
   cashRegistersClosed CashRegister[] @relation("cash_register_closed_by")
   movements           CashMovement[]
-  sales               Sale[]
+  salesOperated       Sale[] @relation("sale_operator")
+  salesCanceled       Sale[] @relation("sale_canceled_by")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -173,12 +174,15 @@ model Sale {
   cashRegister   CashRegister @relation(fields: [cashRegisterId], references: [id])
 
   operatorId String
-  operator   User   @relation(fields: [operatorId], references: [id])
+  operator   User   @relation("sale_operator", fields: [operatorId], references: [id])
 
   customerName String?
   discount     Decimal @default(0) @db.Decimal(12, 2)
   deliveryFee  Decimal @default(0) @db.Decimal(12, 2)
   notes        String?
+
+  cashReceived Decimal? @db.Decimal(12, 2)
+  changeDue    Decimal? @db.Decimal(12, 2)
 
   total Decimal @db.Decimal(12, 2)
 
@@ -189,6 +193,10 @@ model Sale {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   canceledAt DateTime?
+
+  canceledById     String?
+  canceledBy       User?   @relation("sale_canceled_by", fields: [canceledById], references: [id])
+  canceledReason   String?
 
   @@index([cashRegisterId, createdAt])
   @@index([operatorId, createdAt])

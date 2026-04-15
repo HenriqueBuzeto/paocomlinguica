@@ -10,6 +10,7 @@ export async function createSaleAction(payload: {
   notes?: string;
   discount?: string;
   deliveryFee?: string;
+  cashReceived?: string;
   items: Array<{ productId: string; quantity: number }>;
   payments: Array<{ paymentMethodId: string; amount: string }>;
 }) {

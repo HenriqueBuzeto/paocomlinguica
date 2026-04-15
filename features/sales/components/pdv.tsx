@@ -57,6 +57,8 @@ export function Pdv({
     { paymentMethodId: paymentMethods[0]?.id ?? "", amount: "0" },
   ]);
 
+  const [cashReceived, setCashReceived] = useState("0");
+
   const [step, setStep] = useState<"editing" | "confirm">("editing");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -94,6 +96,17 @@ export function Pdv({
     () => payments.reduce((acc, p) => acc + toNumberBR(p.amount), 0),
     [payments],
   );
+
+  const cashIds = useMemo(
+    () => new Set(paymentMethods.filter((m) => m.kind === "CASH").map((m) => m.id)),
+    [paymentMethods],
+  );
+  const hasCash = useMemo(
+    () => payments.some((p) => cashIds.has(p.paymentMethodId)),
+    [payments, cashIds],
+  );
+  const cashReceivedN = toNumberBR(cashReceived);
+  const changeDue = hasCash ? Math.max(0, cashReceivedN - total) : 0;
 
   function addToCart(productId: string) {
     setCart((prev) => ({ ...prev, [productId]: (prev[productId] ?? 0) + 1 }));
@@ -140,10 +153,8 @@ export function Pdv({
     const anyZero = payments.some((p) => toNumberBR(p.amount) <= 0);
     if (anyZero) return "Pagamento com valor inválido.";
 
-    const cashIds = new Set(paymentMethods.filter((m) => m.kind === "CASH").map((m) => m.id));
-    const hasCash = payments.some((p) => cashIds.has(p.paymentMethodId));
-    if (!hasCash) {
-      return "Inclua o pagamento em DINHEIRO quando necessário (troco/sangria usam apenas dinheiro).";
+    if (hasCash && cashReceivedN < total) {
+      return "Valor recebido em dinheiro deve ser maior ou igual ao total.";
     }
 
     return null;
@@ -174,6 +185,7 @@ export function Pdv({
         notes: notes.trim() || undefined,
         discount,
         deliveryFee,
+        cashReceived: hasCash ? cashReceived : undefined,
         items: cartItems.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         payments,
       }).catch((e) => {
@@ -299,6 +311,35 @@ export function Pdv({
                 <span className="text-sm font-medium">Total</span>
                 <span className="text-lg font-semibold tracking-tight">{formatMoney(total)}</span>
               </div>
+
+              {hasCash ? (
+                <div className="mt-4 grid gap-3">
+                  <div className="grid gap-2">
+                    <Label>Valor recebido (DINHEIRO)</Label>
+                    <Input
+                      value={cashReceived}
+                      onChange={(e) => setCashReceived(e.target.value)}
+                      inputMode="decimal"
+                      placeholder="0,00"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-2xl border bg-background px-4 py-3">
+                    <div>
+                      <div className="text-xs font-medium text-muted-foreground">Troco</div>
+                      <div className="text-lg font-semibold tracking-tight">
+                        {formatMoney(changeDue)}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs text-muted-foreground">Recebido</div>
+                      <div className="text-sm font-semibold">
+                        {formatMoney(cashReceivedN)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <div className="grid gap-3">
