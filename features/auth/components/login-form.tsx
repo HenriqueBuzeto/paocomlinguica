@@ -50,11 +50,11 @@ export function LoginForm() {
   return (
     <Card className="w-full max-w-md shadow-sm">
       <CardHeader>
-        <CardTitle>Pão com linguiça</CardTitle>
+        <CardTitle className="text-xl tracking-tight">Pão com linguiça</CardTitle>
         <CardDescription>Entre para acessar o sistema</CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="grid gap-5" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -83,7 +83,7 @@ export function LoginForm() {
 
           {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-          <Button type="submit" disabled={isSubmitting} className="w-full bg-orange-500 hover:bg-orange-600">
+          <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Entrando..." : "Entrar"}
           </Button>
         </form>
