@@ -42,6 +42,13 @@ enum SaleStatus {
   CANCELED
 }
 
+enum PaymentMethodKind {
+  CASH
+  PIX
+  CARD
+  OTHER
+}
+
 model User {
   id           String   @id @default(cuid())
   name         String?
@@ -168,6 +175,11 @@ model Sale {
   operatorId String
   operator   User   @relation(fields: [operatorId], references: [id])
 
+  customerName String?
+  discount     Decimal @default(0) @db.Decimal(12, 2)
+  deliveryFee  Decimal @default(0) @db.Decimal(12, 2)
+  notes        String?
+
   total Decimal @db.Decimal(12, 2)
 
   items     SaleItem[]
@@ -206,6 +218,7 @@ model SaleItem {
 model PaymentMethod {
   id     String @id @default(cuid())
   name   String @unique
+  kind   PaymentMethodKind @default(CASH)
   active Boolean @default(true)
 
   salePayments SalePayment[]
