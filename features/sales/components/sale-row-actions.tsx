@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { CancelSale } from "@/features/sales/components/cancel-sale";
 
 export function SaleRowActions({ saleId }: { saleId: string }) {
@@ -10,6 +11,15 @@ export function SaleRowActions({ saleId }: { saleId: string }) {
 
   return (
     <div className="flex flex-col items-end gap-2">
+      <div className="flex items-center gap-2">
+        <ButtonLink variant="outline" size="sm" href={`/vendas/${saleId}/comprovante?format=80mm`}>
+          80mm
+        </ButtonLink>
+        <ButtonLink variant="outline" size="sm" href={`/vendas/${saleId}/comprovante?format=a4`}>
+          A4
+        </ButtonLink>
+      </div>
+
       <Button
         variant={open ? "outline" : "destructive"}
         size="sm"
