@@ -11,9 +11,9 @@ function Topbar({ title }: { title: string }) {
   const { data } = useSession();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:px-8">
       <div className="min-w-0">
-        <h1 className="truncate text-base font-semibold tracking-tight text-foreground md:text-lg">
+        <h1 className="truncate text-lg font-semibold tracking-tight text-foreground md:text-xl">
           {title}
         </h1>
       </div>
@@ -23,12 +23,12 @@ function Topbar({ title }: { title: string }) {
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Buscar…"
-            className="pl-9 shadow-inner"
+            className="h-10 rounded-full border-transparent bg-muted/60 pl-10 shadow-inner shadow-black/5 ring-1 ring-black/5 focus-visible:bg-background"
             aria-label="Buscar"
           />
         </div>
 
-        <div className="flex items-center gap-2 rounded-2xl border bg-card px-2 py-1 shadow-sm">
+        <div className="flex items-center gap-2 rounded-2xl border bg-card p-1 pl-1.5 shadow-sm">
           <Avatar
             name={data?.user?.name ?? data?.user?.email ?? undefined}
             src={null}

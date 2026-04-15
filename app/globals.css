@@ -124,8 +124,8 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      linear-gradient(to right, rgb(0 0 0 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(0 0 0 / 0.04) 1px, transparent 1px);
+      linear-gradient(to right, rgb(0 0 0 / 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(0 0 0 / 0.08) 1px, transparent 1px);
     background-size: 48px 48px;
     background-position: -1px -1px;
   }

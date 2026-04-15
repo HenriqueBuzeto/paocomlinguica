@@ -16,10 +16,10 @@ function AppShell({
     <div className="min-h-dvh">
       <Sidebar />
 
-      <div className="md:pl-[280px]">
+      <div className="md:pl-[288px]">
         <Topbar title={title} />
 
-        <main className="px-4 py-6 md:px-6">
+        <main className="px-4 py-8 md:px-8">
           <div className="mx-auto w-full max-w-6xl">{children}</div>
         </main>
       </div>

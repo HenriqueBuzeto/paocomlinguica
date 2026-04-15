@@ -26,33 +26,33 @@ function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
-      <div className="flex h-14 items-center gap-2 px-4">
-        <div className="grid size-9 place-items-center rounded-xl bg-sidebar-accent text-sidebar-foreground ring-1 ring-white/10">
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[288px] flex-col border-r border-white/10 bg-[#0b0b0c] text-sidebar-foreground md:flex">
+      <div className="flex h-16 items-center gap-3 px-5">
+        <div className="grid size-10 place-items-center rounded-2xl bg-white/6 text-sidebar-foreground ring-1 ring-white/10 shadow-sm">
           <span className="text-sm font-semibold tracking-tight">PL</span>
         </div>
         <div className="min-w-0">
-          <div className="truncate text-sm font-semibold tracking-tight">
+          <div className="truncate text-sm font-semibold tracking-tight text-white">
             Pão com Linguiça
           </div>
           <div className="truncate text-xs text-white/60">Operação</div>
         </div>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-2 py-3">
+      <nav className="flex flex-1 flex-col gap-1.5 px-3 py-4">
         {nav.map((item) => {
           const Icon = item.icon;
           const active = item.href ? pathname === item.href : false;
           const disabled = !item.href;
 
           const base =
-            "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors";
+            "group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm transition-colors";
 
           const cls = cn(
             base,
             active
               ? "bg-white/8 text-white"
-              : "text-white/75 hover:bg-white/6 hover:text-white",
+              : "text-white/70 hover:bg-white/7 hover:text-white",
             disabled && "cursor-not-allowed opacity-60 hover:bg-transparent",
           );
 
@@ -62,11 +62,11 @@ function Sidebar() {
                 className={cn(
                   "relative grid size-9 place-items-center rounded-xl border border-white/10 bg-white/5 transition-colors",
                   active &&
-                    "border-primary/30 bg-primary/12 shadow-sm shadow-primary/20",
+                    "border-primary/35 bg-primary/12 shadow-[0_10px_30px_-18px] shadow-primary/60",
                 )}
               >
                 {active ? (
-                  <span className="absolute left-[-12px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_0_3px_rgba(0,0,0,0.35)]" />
+                  <span className="absolute left-[-12px] top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_22px_rgba(249,115,22,0.30)]" />
                 ) : null}
                 <Icon className={cn("size-4", active ? "text-primary" : "text-white/80")} />
               </span>
