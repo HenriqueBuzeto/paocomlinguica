@@ -14,7 +14,7 @@ export async function createSaleAction(payload: {
   items: Array<{ productId: string; quantity: number }>;
   payments: Array<{ paymentMethodId: string; amount: string }>;
 }) {
-  await createSale(payload);
+  const sale = await createSale(payload);
   revalidatePath("/vendas");
-  redirect("/vendas?success=1");
+  redirect(`/vendas?success=1&lastSaleId=${sale.id}`);
 }
