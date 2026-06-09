@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { getDb } from "@/lib/db";
 import { PrintReportButton } from "@/components/relatorios/print-report-button";
 import { AnalyticsCharts } from "./analytics-charts";
-import { FileText, Coins, Receipt, ArrowDownRight, Tag } from "lucide-react";
+import { FileText, Coins, Receipt, ArrowDownRight, Tag, TrendingUp } from "lucide-react";
 
 function formatMoney(value: number | string | any) {
   if (value === undefined || value === null) return "--";
@@ -169,82 +169,102 @@ export default async function RelatoriosPage({
           </div>
         </div>
 
-        {/* Abas Visão Geral vs Caixas */}
-        <div className="flex border-b border-border gap-6 no-print">
-          <ButtonLink
-            href={`/relatorios?period=${period}&tab=visao_geral`}
-            variant="ghost"
-            className={`rounded-none border-b-2 px-1 pb-3 text-sm font-semibold cursor-pointer ${
-              tab === "visao_geral"
-                ? "border-primary text-zinc-950"
-                : "border-transparent text-muted-foreground hover:text-zinc-800"
-            }`}
-          >
-            Visão Geral das Vendas
-          </ButtonLink>
-          <ButtonLink
-            href={`/relatorios?period=${period}&tab=caixas`}
-            variant="ghost"
-            className={`rounded-none border-b-2 px-1 pb-3 text-sm font-semibold cursor-pointer ${
-              tab === "caixas"
-                ? "border-primary text-zinc-950"
-                : "border-transparent text-muted-foreground hover:text-zinc-800"
-            }`}
-          >
-            Histórico e Fechamento de Caixas
-          </ButtonLink>
+        {/* Abas Segmentadas (Segmented Control) */}
+        <div className="flex no-print">
+          <div className="inline-flex items-center gap-1 rounded-xl bg-muted/60 p-1 border border-black/[0.03] shadow-inner shadow-black/5">
+            <ButtonLink
+              href={`/relatorios?period=${period}&tab=visao_geral`}
+              variant="ghost"
+              className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${
+                tab === "visao_geral"
+                  ? "bg-background text-zinc-950 shadow-sm border border-black/[0.03]"
+                  : "text-muted-foreground hover:text-zinc-800 hover:bg-transparent"
+              }`}
+            >
+              📊 Visão Geral das Vendas
+            </ButtonLink>
+            <ButtonLink
+              href={`/relatorios?period=${period}&tab=caixas`}
+              variant="ghost"
+              className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${
+                tab === "caixas"
+                  ? "bg-background text-zinc-950 shadow-sm border border-black/[0.03]"
+                  : "text-muted-foreground hover:text-zinc-800 hover:bg-transparent"
+              }`}
+            >
+              📂 Histórico e Fechamento de Caixas
+            </ButtonLink>
+          </div>
         </div>
 
         {tab === "visao_geral" ? (
           <>
             {/* Grid dos KPIs */}
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-              <Card className="p-4 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Faturamento</div>
-                  <div className="text-xl font-bold text-zinc-950 mt-1">{formatMoney(grossRevenue)}</div>
+              <Card className="p-4 flex flex-col justify-between relative overflow-hidden group">
+                <div className="absolute right-2 top-2 text-primary/10 group-hover:text-primary/20 group-hover:scale-110 transition-all duration-300 pointer-events-none">
+                  <TrendingUp className="size-10" />
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-2">Período selecionado</div>
+                <div className="z-10">
+                  <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Faturamento</div>
+                  <div className="text-lg font-extrabold text-zinc-950 mt-1">{formatMoney(grossRevenue)}</div>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-3 z-10">Total vendido</div>
               </Card>
 
-              <Card className="p-4 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Custo (CMV)</div>
-                  <div className="text-xl font-bold text-zinc-950 mt-1">{formatMoney(cogs)}</div>
+              <Card className="p-4 flex flex-col justify-between relative overflow-hidden group">
+                <div className="absolute right-2 top-2 text-red-500/10 group-hover:text-red-500/20 group-hover:scale-110 transition-all duration-300 pointer-events-none">
+                  <ArrowDownRight className="size-10" />
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-2">Custo dos ingredientes</div>
+                <div className="z-10">
+                  <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Custo (CMV)</div>
+                  <div className="text-lg font-extrabold text-zinc-950 mt-1">{formatMoney(cogs)}</div>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-3 z-10">Custo dos insumos</div>
               </Card>
 
-              <Card className="p-4 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Lucro Bruto</div>
-                  <div className="text-xl font-bold text-emerald-600 mt-1">{formatMoney(grossProfit)}</div>
+              <Card className="p-4 flex flex-col justify-between relative overflow-hidden group">
+                <div className="absolute right-2 top-2 text-emerald-500/10 group-hover:text-emerald-500/20 group-hover:scale-110 transition-all duration-300 pointer-events-none">
+                  <Coins className="size-10" />
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-2">Margem sobre o CMV</div>
+                <div className="z-10">
+                  <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Lucro Bruto</div>
+                  <div className="text-lg font-extrabold text-emerald-600 mt-1">{formatMoney(grossProfit)}</div>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-3 z-10">Faturamento - Custo</div>
               </Card>
 
-              <Card className="p-4 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Margem de Lucro</div>
-                  <div className="text-xl font-bold text-zinc-950 mt-1">{profitMargin.toFixed(1)}%</div>
+              <Card className="p-4 flex flex-col justify-between relative overflow-hidden group">
+                <div className="absolute right-2 top-2 text-purple-500/10 group-hover:text-purple-500/20 group-hover:scale-110 transition-all duration-300 pointer-events-none">
+                  <Tag className="size-10" />
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-2">Retorno de margem bruta</div>
+                <div className="z-10">
+                  <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Margem de Lucro</div>
+                  <div className="text-lg font-extrabold text-zinc-950 mt-1">{profitMargin.toFixed(1)}%</div>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-3 z-10">Rentabilidade bruta</div>
               </Card>
 
-              <Card className="p-4 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Ticket Médio</div>
-                  <div className="text-xl font-bold text-primary mt-1">{formatMoney(averageTicket)}</div>
+              <Card className="p-4 flex flex-col justify-between relative overflow-hidden group">
+                <div className="absolute right-2 top-2 text-amber-500/10 group-hover:text-amber-500/20 group-hover:scale-110 transition-all duration-300 pointer-events-none">
+                  <Receipt className="size-10" />
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-2">Valor médio por pedido</div>
+                <div className="z-10">
+                  <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Ticket Médio</div>
+                  <div className="text-lg font-extrabold text-zinc-950 mt-1">{formatMoney(averageTicket)}</div>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-3 z-10">Média por pedido</div>
               </Card>
 
-              <Card className="p-4 flex flex-col justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Qtd Pedidos</div>
-                  <div className="text-xl font-bold text-zinc-950 mt-1">{salesCount}</div>
+              <Card className="p-4 flex flex-col justify-between relative overflow-hidden group">
+                <div className="absolute right-2 top-2 text-blue-500/10 group-hover:text-blue-500/20 group-hover:scale-110 transition-all duration-300 pointer-events-none">
+                  <FileText className="size-10" />
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-2">Pedidos finalizados</div>
+                <div className="z-10">
+                  <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Qtd Pedidos</div>
+                  <div className="text-lg font-extrabold text-zinc-950 mt-1">{salesCount}</div>
+                </div>
+                <div className="text-[9px] text-muted-foreground mt-3 z-10">Total de pedidos</div>
               </Card>
             </div>
 

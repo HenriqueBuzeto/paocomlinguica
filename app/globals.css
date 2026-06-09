@@ -124,10 +124,12 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      linear-gradient(to right, rgb(0 0 0 / 0.08) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(0 0 0 / 0.08) 1px, transparent 1px);
-    background-size: 48px 48px;
-    background-position: -1px -1px;
+      radial-gradient(circle at 50% 50%, transparent 45%, var(--background) 100%),
+      linear-gradient(to right, rgb(0 0 0 / 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(0 0 0 / 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 48px 48px, 48px 48px;
+    background-position: center, -1px -1px, -1px -1px;
+    background-attachment: fixed;
   }
   html {
     @apply font-sans;

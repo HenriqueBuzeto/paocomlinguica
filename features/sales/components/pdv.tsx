@@ -328,15 +328,15 @@ export function Pdv({
                 className="rounded-xl border-border bg-background"
               />
 
-              {/* Abas das Categorias */}
-              <div className="flex flex-wrap gap-1.5 pb-1 overflow-x-auto">
+              {/* Abas das Categorias (Segmented Pills Control) */}
+              <div className="flex flex-wrap items-center gap-1.5 rounded-2xl bg-muted/50 p-1.5 border border-black/[0.03] shadow-inner shadow-black/5 overflow-x-auto">
                 <button
                   type="button"
                   onClick={() => setSelectedCategory("all")}
-                  className={`flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[11px] font-semibold border transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                     selectedCategory === "all"
                       ? "bg-primary border-primary text-white shadow-sm"
-                      : "bg-background/60 hover:bg-muted/40 text-muted-foreground border-border"
+                      : "bg-background/80 hover:bg-muted/40 text-muted-foreground border-transparent hover:text-zinc-800"
                   }`}
                 >
                   🍽️ Todos ({products.length})
@@ -349,15 +349,15 @@ export function Pdv({
                       key={cat.id}
                       type="button"
                       onClick={() => setSelectedCategory(cat.id)}
-                      className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[11px] font-semibold border transition-all cursor-pointer ${
+                      className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                         selectedCategory === cat.id
                           ? "bg-primary border-primary text-white shadow-sm"
-                          : "bg-background/60 hover:bg-muted/40 text-muted-foreground border-border"
+                          : "bg-background/80 hover:bg-muted/40 text-muted-foreground border-transparent hover:text-zinc-800"
                       }`}
                     >
                       <span>{emoji}</span>
                       <span>{cat.name}</span>
-                      <span className="text-[9px] opacity-75">({count})</span>
+                      <span className="text-[10px] opacity-75 font-medium">({count})</span>
                     </button>
                   );
                 })}
@@ -381,10 +381,10 @@ export function Pdv({
                     <div
                       key={p.id}
                       onClick={() => addToCart(p.id)}
-                      className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-4 cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${
+                      className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-4 cursor-pointer select-none transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${
                         qty > 0
-                          ? "bg-primary/5 border-primary/40 shadow-xs"
-                          : "bg-background/60 border-border hover:bg-background hover:border-muted-foreground/20"
+                          ? "bg-primary/[0.04] border-primary/40 shadow-sm shadow-primary/5"
+                          : "bg-background/85 border-black/[0.04] hover:bg-background hover:border-black/[0.09]"
                       }`}
                     >
                       {qty > 0 && (
@@ -394,7 +394,7 @@ export function Pdv({
                       )}
                       
                       <div>
-                        <span className="text-xl mb-1.5 block">{emoji}</span>
+                        <span className="text-xl mb-1.5 block group-hover:scale-110 transition-transform duration-300 pointer-events-none">{emoji}</span>
                         <h3 className="font-semibold text-xs leading-snug text-zinc-900 group-hover:text-primary transition-colors">
                           {p.name}
                         </h3>
@@ -410,7 +410,7 @@ export function Pdv({
                         
                         <span className={`text-[9px] font-bold rounded-lg px-2 py-0.5 transition-all ${
                           qty > 0
-                            ? "bg-primary text-white"
+                            ? "bg-primary text-white shadow-xs"
                             : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
                         }`}>
                           {qty > 0 ? "Adicionado" : "+ Add"}
