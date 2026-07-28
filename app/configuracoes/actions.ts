@@ -77,7 +77,11 @@ export async function createUserAction(formData: FormData) {
       name,
       email,
       passwordHash,
-      roleId: role.id,
+      roles: {
+        create: {
+          roleId: role.id
+        }
+      }
     },
   });
 

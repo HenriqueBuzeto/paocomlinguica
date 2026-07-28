@@ -31,11 +31,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (pathname.startsWith("/relatorios") && !hasRole(token.role as string | undefined, "GERENTE")) {
+  const userPermissions = (token.permissions as string[]) || [];
+
+  if (pathname.startsWith("/relatorios") && !userPermissions.includes("reports.view_financial")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if (pathname.startsWith("/admin") && !hasRole(token.role as string | undefined, "ADMIN")) {
+  if (pathname.startsWith("/configuracoes") && !userPermissions.includes("settings.manage")) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

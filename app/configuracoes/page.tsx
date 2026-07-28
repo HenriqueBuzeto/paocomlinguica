@@ -20,7 +20,11 @@ export default async function ConfiguracoesPage() {
     }),
     db.user.findMany({
       orderBy: { name: "asc" },
-      include: { role: true },
+      include: {
+        roles: {
+          include: { role: true }
+        }
+      },
     }),
   ]);
 
@@ -168,15 +172,15 @@ export default async function ConfiguracoesPage() {
                         <div className="col-span-4 flex justify-end">
                           <span
                             className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[9px] font-bold border ${
-                              u.role.name === "ADMIN"
+                              (u.roles[0]?.role?.name ?? "OPERADOR") === "ADMIN"
                                 ? "bg-red-50 text-red-700 border-red-100"
-                                : u.role.name === "GERENTE"
+                                : (u.roles[0]?.role?.name ?? "OPERADOR") === "GERENTE"
                                 ? "bg-amber-50 text-amber-700 border-amber-100"
                                 : "bg-blue-50 text-blue-700 border-blue-100"
                             }`}
                           >
                             <Shield className="size-3" />
-                            {u.role.name}
+                            {u.roles[0]?.role?.name ?? "OPERADOR"}
                           </span>
                         </div>
                       </div>

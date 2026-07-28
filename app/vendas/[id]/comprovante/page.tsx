@@ -43,7 +43,9 @@ export default async function ComprovantePage({
     include: {
       operator: { select: { name: true, email: true } },
       items: { include: { product: { select: { name: true } } } },
-      payments: { include: { paymentMethod: { select: { name: true, kind: true } } } },
+      movements: {
+        where: { type: "VENDA", status: "ACTIVE" }
+      }
     },
   });
 
@@ -158,9 +160,9 @@ export default async function ComprovantePage({
               PAGAMENTOS
             </div>
             <div className={mode === "80mm" ? "mt-1 grid gap-1" : "mt-2 grid gap-2"}>
-              {sale.payments.map((p: (typeof sale.payments)[number]) => (
+              {sale.movements.map((p: (typeof sale.movements)[number]) => (
                 <div key={p.id} className="flex items-center justify-between">
-                  <span className="text-zinc-600">{p.paymentMethod.name}</span>
+                  <span className="text-zinc-600">{p.description || "VENDA"}</span>
                   <span className="font-semibold">{formatMoney(p.amount)}</span>
                 </div>
               ))}

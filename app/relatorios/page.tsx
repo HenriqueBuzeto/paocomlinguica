@@ -58,11 +58,12 @@ export default async function RelatoriosPage({
           },
         },
       },
-      payments: {
-        include: {
-          paymentMethod: { select: { name: true, kind: true } },
-        },
-      },
+    },
+  });
+
+  const payments = await db.payment.findMany({
+    where: {
+      createdAt: { gte, lte },
     },
   });
 
@@ -117,11 +118,9 @@ export default async function RelatoriosPage({
 
   // Distribuição por meio de pagamento
   const paymentMap = new Map<string, number>();
-  sales.forEach((s) => {
-    s.payments.forEach((p) => {
-      const pmName = p.paymentMethod.name.replace(/_/g, " ");
-      paymentMap.set(pmName, (paymentMap.get(pmName) ?? 0) + Number(p.amount.toString()));
-    });
+  payments.forEach((p) => {
+    const pmName = p.method.replace(/_/g, " ");
+    paymentMap.set(pmName, (paymentMap.get(pmName) ?? 0) + Number(p.amount.toString()));
   });
   const salesByPayment = Array.from(paymentMap.entries()).map(([name, valor]) => ({
     name,
@@ -135,6 +134,11 @@ export default async function RelatoriosPage({
       openedBy: { select: { name: true, email: true } },
       closedBy: { select: { name: true, email: true } },
       movements: true,
+      closings: {
+        include: {
+          methods: true,
+        },
+      },
     },
     take: 15,
   });
@@ -305,9 +309,19 @@ export default async function RelatoriosPage({
                   <div className="divide-y">
                     {pastRegisters.map((reg) => {
                       const opening = Number(reg.openingBalance.toString());
-                      const expected = reg.expectedBalance ? Number(reg.expectedBalance.toString()) : 0;
-                      const reported = reg.closingBalanceReported ? Number(reg.closingBalanceReported.toString()) : 0;
-                      const difference = reg.difference ? Number(reg.difference.toString()) : 0;
+                      
+                      const closing = reg.closings[0];
+                      let expected = 0;
+                      let reported = 0;
+                      let difference = 0;
+                      
+                      if (closing) {
+                        closing.methods.forEach((m) => {
+                          expected += Number(m.expectedValue.toString());
+                          reported += Number(m.declaredValue.toString());
+                          difference += Number(m.difference.toString());
+                        });
+                      }
 
                       return (
                         <div

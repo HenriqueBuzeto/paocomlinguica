@@ -9,15 +9,27 @@ import {
   Receipt,
   Settings,
   Wallet,
+  Grid,
+  Layers,
+  ChefHat,
+  Truck,
+  Users,
+  Boxes,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const nav = [
   { label: "Dashboard", href: "/", icon: Home },
-  { label: "Caixa", href: "/caixa", icon: Wallet },
+  { label: "Mesas", href: "/mesas", icon: Grid },
+  { label: "Comandas", href: "/comandas", icon: Layers },
   { label: "Vendas", href: "/vendas", icon: Receipt },
+  { label: "Cozinha", href: "/cozinha", icon: ChefHat },
+  { label: "Entregas", href: "/entregas", icon: Truck },
+  { label: "Caixa", href: "/caixa", icon: Wallet },
   { label: "Produtos", href: "/produtos", icon: Package },
+  { label: "Estoque", href: "/estoque", icon: Boxes },
+  { label: "Clientes", href: "/clientes", icon: Users },
   { label: "Relatórios", href: "/relatorios", icon: BarChart3 },
   { label: "Configurações", href: "/configuracoes", icon: Settings },
 ] as const;
